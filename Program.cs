@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<DataContext>();
 builder.Services.AddScoped<DapperContext>();
 builder.Services.AddScoped<ICategoryService, CategoryServiceImpl>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 
 //Add Service by OnConfigure Method
 
