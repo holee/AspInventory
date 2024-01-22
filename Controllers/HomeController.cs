@@ -7,7 +7,6 @@ namespace Inventory.Controllers
 
 
         [HttpGet]
-        [ActionName("List")]
         public ViewResult Index()
         {
             return View("Index");

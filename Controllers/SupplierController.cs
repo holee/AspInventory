@@ -23,7 +23,8 @@ namespace Inventory.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Store(Supplier supplier) 
+        [ActionName("Create")]
+        public async Task<IActionResult> Store(Supplier supplier)  
         { 
             if(!ModelState.IsValid)
             {
