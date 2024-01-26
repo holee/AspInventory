@@ -62,7 +62,6 @@ namespace Inventory.Controllers
             });
 
             ViewBag.cats = new SelectList(cats, "Id", "CategoryName");
-
             ViewData["categories"]= new SelectList(cats, "Id", "CategoryName");
 
 

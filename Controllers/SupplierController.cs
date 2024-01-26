@@ -14,9 +14,25 @@ namespace Inventory.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var results= service.GetAll();
-            return View(await results);
+            //var results=await service.GetAll();
+            //return View(results);
+            return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var supplier = await service.Get(id);
+            return View(supplier);
+        }
+
+
+
+
+
+
+
+
         public IActionResult Create()
         {
             return View();
@@ -31,6 +47,30 @@ namespace Inventory.Controllers
                 return View(supplier);
             }
             if(await service.Create(supplier))
+            {
+                return RedirectToAction("Index");
+            }
+            return View(supplier);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            //var supplier = await service.Get(id);
+            await Task.CompletedTask;
+            return View(new Supplier());
+        }
+
+        [HttpPost]
+        [ActionName("Edit")]
+        public async Task<IActionResult> Update(int id,Supplier supplier)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(supplier);
+            }
+            if (await service.Create(supplier))
             {
                 return RedirectToAction("Index");
             }

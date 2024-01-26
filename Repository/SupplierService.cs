@@ -1,6 +1,7 @@
 ﻿using Inventory.Data;
 using Inventory.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net.NetworkInformation;
 
 namespace Inventory.Repository
 {
@@ -25,15 +26,18 @@ namespace Inventory.Repository
             return await context.SaveChangesAsync() >0;
         }
 
-        public Task<Supplier> Get(Supplier supplier)
+        public async Task<Supplier> Get(int id)
         {
-            throw new NotImplementedException();
+            var supplier = await context.Suppliers.FirstOrDefaultAsync(x => x.Id == id);
+            ///SELECT TOP(1) FROM Supplier WHERE id=@id;
+            return supplier!;
         }
 
         public async Task<List<Supplier>> GetAll()
         {
-            var results =context.Suppliers;
-            return await results.ToListAsync();
+            var results = await context.Suppliers.ToListAsync();
+            //select * from supplier;
+            return results;
         }
 
         public async Task<bool> Update(Supplier supplier)

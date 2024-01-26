@@ -1,0 +1,79 @@
+﻿@model Supplier
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<h1>Edit</h1>
+<a asp-action="Index" asp-controller="Supplier">List</a>
+<form asp-action="Edit" asp-controller="Supplier"
+                        asp-route-id="@Model.Id">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone" class="control-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City" class="control-label"></label>
+        <input  asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <div class="mb-2">
+        <select asp-for="Gender" 
+                asp-items="@Html.GetEnumSelectList<Gender>()"
+                class="form-select">
+            <option value="">Select Gender</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <select asp-for="Gender"
+                asp-items="@(new SelectList(new string[]{"Male","Female","Other","Not Sure"}))"
+                class="form-select">
+            <option value="">Select Gender</option>
+        </select>
+    </div>
+    <div class="mb-2">
+        @{
+            var ss = new List<SelectListItem>
+            {
+                new SelectListItem ("Fename","female"),
+                new SelectListItem ("Male","male"),
+                new SelectListItem ("Other","other"),
+            };
+        }
+        <select asp-for="Gender"
+                asp-items="@ss">
+            <option value="">Select Gender</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address" class="control-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+
+
+</form>
