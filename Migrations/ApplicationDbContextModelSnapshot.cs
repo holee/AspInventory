@@ -83,7 +83,7 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryRefId")
+                    b.Property<int>("CateId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -100,10 +100,12 @@ namespace Inventory.Migrations
                     b.Property<decimal?>("StandardPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupllierRefId")
+                    b.Property<int>("SupplierRefId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CateId");
 
                     b.ToTable("Items");
                 });
@@ -149,6 +151,22 @@ namespace Inventory.Migrations
                         .IsRequired();
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Item", b =>
+                {
+                    b.HasOne("Inventory.Models.Category", "Category")
+                        .WithMany("Item")
+                        .HasForeignKey("CateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Category", b =>
+                {
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("Inventory.Models.Supplier", b =>

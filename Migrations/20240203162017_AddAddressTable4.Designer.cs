@@ -77,7 +77,7 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryRefId")
+                    b.Property<int>("CateId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
