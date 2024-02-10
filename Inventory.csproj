@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Human\Data\" />
+    <Folder Include="Areas\Human\Models\" />
+    <Folder Include="Areas\Human\Views\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -31,7 +31,25 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 
-app.MapDefaultControllerRoute();
-///app.MapControllerRoute(name:"Home",pattern:"{conttroller=Item}/{action=Index}/{productId?}");
+app.MapDefaultControllerRoute();//controller=Home/action=Index/id?
+//app.MapControllerRoute(
+//        name:"Home",
+//        pattern:"Example/{controller=Item}/{action=Index}/{id?}");
+
+
+
+
+
+//app.MapControllerRoute(
+//        name: "Home1",
+//        pattern: "{controller}/{action}/{id:int:min(2):max(100)?}",
+//        defaults: new { controller = "Item", action = "Index" });
+//app.MapAreaControllerRoute(
+//        name: "areas",
+//        areaName: "Human",
+//        pattern: "{area}/{controller=Humans}/{action=Index}/{id:int?}");
 
 app.Run();
+
+
+//controller,action,area

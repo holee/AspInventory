@@ -32,7 +32,7 @@ namespace Inventory.Controllers
             {
                 Id=x.Field<int>("Id"),
                 CategoryRefId=x.Field<int>("CategoryRefId"),
-                SupllierRefId= x.Field<int>("SupllierRefId"),
+                SupplierRefId= x.Field<int>("SupllierRefId"),
                 ProductCode= x.Field<string>("ProductCode")!,
                 ProductName= x.Field<string>("ProductName")!,
                 StandardPrice= x.Field<decimal>("StandardPrice"),

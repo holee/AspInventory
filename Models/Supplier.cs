@@ -24,7 +24,8 @@ namespace Inventory.Models
         public string? Email { get; set; }//type="email"
         public string? Gender { get; set; } 
         public string? City { get; set; }
-        public string? Address { get; set; }
+        public Address? Address { get; set; }  
+        //public Item?    Item { get; set; }
         public string? Description { get; set; }
 
     }

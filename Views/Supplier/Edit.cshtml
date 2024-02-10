@@ -31,48 +31,41 @@
     <div class="mb-2">
         <select asp-for="Gender" 
                 asp-items="@Html.GetEnumSelectList<Gender>()"
-                class="form-select">
+                class="custom-select">
             <option value="">Select Gender</option>
         </select>
-    </div>
-    <div class="mb-2">
-        <select asp-for="Gender"
-                asp-items="@(new SelectList(new string[]{"Male","Female","Other","Not Sure"}))"
-                class="form-select">
-            <option value="">Select Gender</option>
-        </select>
-    </div>
-    <div class="mb-2">
-        @{
-            var ss = new List<SelectListItem>
-            {
-                new SelectListItem ("Fename","female"),
-                new SelectListItem ("Male","male"),
-                new SelectListItem ("Other","other"),
-            };
-        }
-        <select asp-for="Gender"
-                asp-items="@ss">
-            <option value="">Select Gender</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label asp-for="Address" class="control-label"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Description" class="control-label"></label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+    <div class="row">
+            <input type="hidden" asp-for="Address!.Id" />
+            <input type="hidden" asp-for="Address!.SupplierRefId" />
+            <div class="col-sm-2">
+                <label asp-for="Address!.City"></label>
+                <input asp-for="Address!.City" class="form-control" />
+            </div>
+            <div class="col-sm-2">
+                <label asp-for="Address!.ProvinceName"></label>
+                <input asp-for="Address!.ProvinceName" class="form-control" />
+            </div>
+            <div class="col-sm-2">
+                <label asp-for="Address!.DistrictName"></label>
+                <input asp-for="Address!.DistrictName" class="form-control" />
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="Address!.CommuneName"></label>
+                <input asp-for="Address!.CommuneName" class="form-control" />
+            </div>
+            <div class="col-sm-3">
+                <label asp-for="Address!.Village"></label>
+                <input asp-for="Address!.Village" class="form-control" />
+            </div>
+    </div>
+    <div class="mt-2">
+        <input type="submit" value="Save Changed" class="btn btn-primary" />
     </div>
 
 

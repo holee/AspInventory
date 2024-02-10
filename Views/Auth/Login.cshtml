@@ -1,4 +1,4 @@
-﻿@model UserModel
+﻿@model LoginModel
 @{
     ViewData["Title"] = "Login";
 }
@@ -6,13 +6,16 @@
 <h1>Login</h1>
 
 <form asp-action="Login" asp-controller="Auth" method="post">
+    <div asp-validation-summary="All"></div>
     <div>
         <label asp-for="UserName"></label>
         <input asp-for="UserName" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
     </div>
     <div>
         <label asp-for="Password"></label>
         <input asp-for="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
     <div>
         <label asp-for="RememberMe"></label>

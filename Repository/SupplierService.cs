@@ -14,6 +14,9 @@ namespace Inventory.Repository
             this.context = context;
         }
 
+
+
+
         public async Task<bool> Create(Supplier supplier)
         {
            context.Suppliers.Add(supplier);
@@ -28,7 +31,9 @@ namespace Inventory.Repository
 
         public async Task<Supplier> Get(int id)
         {
-            var supplier = await context.Suppliers.FirstOrDefaultAsync(x => x.Id == id);
+            var supplier = await context.Suppliers
+                                    .Include(p=>p.Address)
+                                    .FirstOrDefaultAsync(x => x.Id == id);
             ///SELECT TOP(1) FROM Supplier WHERE id=@id;
             return supplier!;
         }
@@ -42,16 +47,25 @@ namespace Inventory.Repository
 
         public async Task<bool> Update(Supplier supplier)
         {
-            //var sup=await context.Suppliers.FirstOrDefaultAsync(x=>x.Id==supplier.Id);
-            //sup!.Name=supplier.Name;
-            //sup!.Description=supplier.Description;
-            //sup!.Address=supplier.Address;
-            //sup!.City=supplier.City;
-            //sup!.Email=supplier.Email;
-            //sup!.Phone=supplier.Phone;
-            context.Suppliers.Update(supplier);
+            var sup=await context.Suppliers
+                        .Include(p=>p.Address)      
+                                .FirstOrDefaultAsync(x=>x.Id==supplier.Id);
+            sup!.Name = supplier.Name;
+            sup!.Description = supplier.Description;
+            sup!.Address = supplier.Address;
+            sup!.City = supplier.City;
+            sup!.Email = supplier.Email;
+            sup!.Phone = supplier.Phone;
+            sup.Gender = supplier.Gender;   
+            sup!.Address= supplier.Address;
             return await context.SaveChangesAsync() > 0;
 
+        }
+
+        public async Task<bool> Update1(Supplier supplier)
+        {
+            context.Suppliers.Update(supplier);
+            return await context.SaveChangesAsync() > 0;
         }
     }
 }
