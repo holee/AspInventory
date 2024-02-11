@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240210151319_0003")]
-    partial class _0003
+    [Migration("20240210163003_test06")]
+    partial class test06
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,7 +86,7 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CateId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -106,9 +106,14 @@ namespace Inventory.Migrations
                     b.Property<int>("SupplierRefId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("cid")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CateId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("cid");
 
                     b.ToTable("Items");
                 });
@@ -159,17 +164,19 @@ namespace Inventory.Migrations
             modelBuilder.Entity("Inventory.Models.Item", b =>
                 {
                     b.HasOne("Inventory.Models.Category", "Category")
-                        .WithMany("Item")
-                        .HasForeignKey("CateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Inventory.Models.Category", null)
+                        .WithMany("Items")
+                        .HasForeignKey("cid");
 
                     b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Inventory.Models.Category", b =>
                 {
-                    b.Navigation("Item");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Inventory.Models.Supplier", b =>

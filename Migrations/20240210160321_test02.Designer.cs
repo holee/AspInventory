@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240203162332_AddAddressTable5")]
-    partial class AddAddressTable5
+    [Migration("20240210160321_test02")]
+    partial class test02
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,10 +103,12 @@ namespace Inventory.Migrations
                     b.Property<decimal?>("StandardPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupllierRefId")
+                    b.Property<int>("SupplierRefId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CateId");
 
                     b.ToTable("Items");
                 });
@@ -152,6 +154,22 @@ namespace Inventory.Migrations
                         .IsRequired();
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Item", b =>
+                {
+                    b.HasOne("Inventory.Models.Category", "Category")
+                        .WithMany("Items")
+                        .HasForeignKey("CateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Category", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Inventory.Models.Supplier", b =>

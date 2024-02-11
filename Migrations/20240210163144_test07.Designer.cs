@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240120144950_01")]
-    partial class _01
+    [Migration("20240210163144_test07")]
+    partial class test07
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,40 @@ namespace Inventory.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Inventory.Models.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CommuneName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DistrictName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProvinceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SupplierRefId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Village")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierRefId")
+                        .IsUnique();
+
+                    b.ToTable("Addresses");
+                });
 
             modelBuilder.Entity("Inventory.Models.Category", b =>
                 {
@@ -52,9 +86,6 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CateId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -69,10 +100,15 @@ namespace Inventory.Migrations
                     b.Property<decimal?>("StandardPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupllierRefId")
+                    b.Property<int>("SupplierRefId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("cid")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("cid");
 
                     b.ToTable("Items");
                 });
@@ -85,9 +121,6 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -95,6 +128,9 @@ namespace Inventory.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -107,6 +143,36 @@ namespace Inventory.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Address", b =>
+                {
+                    b.HasOne("Inventory.Models.Supplier", "Supplier")
+                        .WithOne("Address")
+                        .HasForeignKey("Inventory.Models.Address", "SupplierRefId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Item", b =>
+                {
+                    b.HasOne("Inventory.Models.Category", "Category")
+                        .WithMany("Items")
+                        .HasForeignKey("cid");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Category", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Supplier", b =>
+                {
+                    b.Navigation("Address");
                 });
 #pragma warning restore 612, 618
         }

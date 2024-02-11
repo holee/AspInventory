@@ -31,7 +31,7 @@ namespace Inventory.Controllers
             var items = table.AsEnumerable().Select(x => new Item
             {
                 Id=x.Field<int>("Id"),
-                CateId=x.Field<int>("CateId"),
+                //CateId=x.Field<int>("CateId"),
                 SupplierRefId= x.Field<int>("SupllierRefId"),
                 ProductCode= x.Field<string>("ProductCode")!,
                 ProductName= x.Field<string>("ProductName")!,

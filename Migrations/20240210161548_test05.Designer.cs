@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240210153509_005")]
-    partial class _005
+    [Migration("20240210161548_test05")]
+    partial class test05
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,9 +86,6 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CateId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -106,9 +103,12 @@ namespace Inventory.Migrations
                     b.Property<int>("SupplierRefId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("catId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CateId");
+                    b.HasIndex("catId");
 
                     b.ToTable("Items");
                 });
@@ -159,17 +159,15 @@ namespace Inventory.Migrations
             modelBuilder.Entity("Inventory.Models.Item", b =>
                 {
                     b.HasOne("Inventory.Models.Category", "Category")
-                        .WithMany("Item")
-                        .HasForeignKey("CateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Items")
+                        .HasForeignKey("catId");
 
                     b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Inventory.Models.Category", b =>
                 {
-                    b.Navigation("Item");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Inventory.Models.Supplier", b =>

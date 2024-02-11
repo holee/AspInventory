@@ -13,7 +13,7 @@ public class Item
     public string ProductName { get; set; } = default!;
     public decimal? StandardPrice { get; set; }
     public string? ImageUrl { get; set; }
-    [ForeignKey(nameof(Category))]
-    public int CateId { get; set; }
+
+    //public int CateId { get; set; }
     public Category? Category { get; set; }
 }

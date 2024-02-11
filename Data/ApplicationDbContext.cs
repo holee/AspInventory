@@ -26,6 +26,20 @@ namespace Inventory.Data
                             .WithOne(e=>e.Supplier)
                             .HasForeignKey<Address>(a=>a.SupplierRefId);
 
+
+
+
+            //modelBuilder.Entity<Item>()
+            //                .HasOne(x=>x.Category)
+            //                    .WithMany(x => x.Items)
+            //                      .HasForeignKey("catId");
+
+            modelBuilder.Entity<Category>()
+                                .HasMany(x => x.Items)
+                                    .WithOne(x=>x.Category)
+                                        .HasForeignKey("cid");
+
+
             //modelBuilder.Entity<Item>()
             //    .HasOne(x => x.Category)
             //    .WithMany(x => x.Item)

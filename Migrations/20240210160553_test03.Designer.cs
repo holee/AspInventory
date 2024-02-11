@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240203162017_AddAddressTable4")]
-    partial class AddAddressTable4
+    [Migration("20240210160553_test03")]
+    partial class test03
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,11 @@ namespace Inventory.Migrations
 
             modelBuilder.Entity("Inventory.Models.Address", b =>
                 {
-                    b.Property<int>("SupplierId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
@@ -42,10 +45,16 @@ namespace Inventory.Migrations
                     b.Property<string>("ProvinceName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SupplierRefId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Village")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SupplierId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierRefId")
+                        .IsUnique();
 
                     b.ToTable("Addresses");
                 });
@@ -77,9 +86,6 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CateId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -94,10 +100,15 @@ namespace Inventory.Migrations
                     b.Property<decimal?>("StandardPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupllierRefId")
+                    b.Property<int>("SupplierRefId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("cat_id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("cat_id");
 
                     b.ToTable("Items");
                 });
@@ -138,11 +149,25 @@ namespace Inventory.Migrations
                 {
                     b.HasOne("Inventory.Models.Supplier", "Supplier")
                         .WithOne("Address")
-                        .HasForeignKey("Inventory.Models.Address", "SupplierId")
+                        .HasForeignKey("Inventory.Models.Address", "SupplierRefId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Item", b =>
+                {
+                    b.HasOne("Inventory.Models.Category", "Category")
+                        .WithMany("Items")
+                        .HasForeignKey("cat_id");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Category", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Inventory.Models.Supplier", b =>
