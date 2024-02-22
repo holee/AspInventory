@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Inventory.Migrations
 {
     /// <inheritdoc />
-    public partial class test01 : Migration
+    public partial class t1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,21 +49,21 @@ namespace Inventory.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SupplierRefId = table.Column<int>(type: "int", nullable: false),
                     ProductCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StandardPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    CateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_Categories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Items_Categories_CateId",
+                        column: x => x.CateId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,6 +90,32 @@ namespace Inventory.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ItemSupplier",
+                columns: table => new
+                {
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    SupId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemSupplier", x => new { x.ItemId, x.SupId });
+                    table.ForeignKey(
+                        name: "FK_ItemSupplier_Items_SupId",
+                        column: x => x.SupId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ItemSupplier_Suppliers_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Suppliers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_SupplierRefId",
                 table: "Addresses",
@@ -96,9 +123,14 @@ namespace Inventory.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_CategoryId",
+                name: "IX_Items_CateId",
                 table: "Items",
-                column: "CategoryId");
+                column: "CateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItemSupplier_SupId",
+                table: "ItemSupplier",
+                column: "SupId");
         }
 
         /// <inheritdoc />
@@ -106,6 +138,9 @@ namespace Inventory.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Addresses");
+
+            migrationBuilder.DropTable(
+                name: "ItemSupplier");
 
             migrationBuilder.DropTable(
                 name: "Items");

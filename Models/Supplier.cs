@@ -10,7 +10,7 @@ namespace Inventory.Models
         Other
     }
 
-
+    //ItemSupplier
     public class Supplier
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,8 +24,10 @@ namespace Inventory.Models
         public string? Email { get; set; }//type="email"
         public string? Gender { get; set; } 
         public string? City { get; set; }
-        public Address? Address { get; set; }  
-        //public Item?    Item { get; set; }
+        public Address? Address { get; set; }
+        //public List<ItemSupplier>? ItemSuppliers { get; set; }
+
+        public List<Item>? Items { get; set; } 
         public string? Description { get; set; }
 
     }

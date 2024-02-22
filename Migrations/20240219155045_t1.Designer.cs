@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240210161548_test05")]
-    partial class test05
+    [Migration("20240219155045_t1")]
+    partial class t1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,6 +86,9 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CateId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,17 +103,32 @@ namespace Inventory.Migrations
                     b.Property<decimal?>("StandardPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupplierRefId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("catId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("catId");
+                    b.HasIndex("CateId");
 
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Inventory.Models.ItemSupplier", b =>
+                {
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ItemId", "SupId");
+
+                    b.HasIndex("SupId");
+
+                    b.ToTable("ItemSupplier");
                 });
 
             modelBuilder.Entity("Inventory.Models.Supplier", b =>
@@ -160,9 +178,30 @@ namespace Inventory.Migrations
                 {
                     b.HasOne("Inventory.Models.Category", "Category")
                         .WithMany("Items")
-                        .HasForeignKey("catId");
+                        .HasForeignKey("CateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Inventory.Models.ItemSupplier", b =>
+                {
+                    b.HasOne("Inventory.Models.Supplier", "Supplier")
+                        .WithMany("ItemSuppliers")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Inventory.Models.Item", "Item")
+                        .WithMany("ItemSuppliers")
+                        .HasForeignKey("SupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Inventory.Models.Category", b =>
@@ -170,9 +209,16 @@ namespace Inventory.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("Inventory.Models.Item", b =>
+                {
+                    b.Navigation("ItemSuppliers");
+                });
+
             modelBuilder.Entity("Inventory.Models.Supplier", b =>
                 {
                     b.Navigation("Address");
+
+                    b.Navigation("ItemSuppliers");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,17 +7,13 @@ namespace Inventory.Models
     {
         [Key]
         public int Id { get; set; }
-
-        /// [ForeignKey("Supplier")]
         public int SupplierRefId { get; set; }   
         public string? City { get; set; }
         public string? ProvinceName { get; set; }
         public string? DistrictName { get; set; }
         public string? CommuneName { get; set; }
         public string? Village { get; set; }
-
-
-        //[ForeignKey("SupplierRefId")]
+        [ForeignKey("SupplierRefId")]
         public Supplier? Supplier { get; set; } 
     }
 }

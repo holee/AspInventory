@@ -4,6 +4,7 @@ using Inventory.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240222152437_t000100")]
+    partial class t000100
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,12 +199,18 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CustomerRefId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Discount")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("EmployeeRefId")
                         .HasColumnType("int");
@@ -215,7 +224,11 @@ namespace Inventory.Migrations
 
                     b.HasKey("OrderId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("CustomerRefId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("EmployeeRefId");
 
@@ -347,11 +360,19 @@ namespace Inventory.Migrations
 
             modelBuilder.Entity("Inventory.Models.Order", b =>
                 {
+                    b.HasOne("Inventory.Models.Customer", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
                     b.HasOne("Inventory.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerRefId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Inventory.Models.Employee", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("Inventory.Models.Employee", "Employee")
                         .WithMany()
@@ -382,6 +403,16 @@ namespace Inventory.Migrations
             modelBuilder.Entity("Inventory.Models.Category", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Inventory.Models.Employee", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Inventory.Models.Item", b =>

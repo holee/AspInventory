@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240210163144_test07")]
-    partial class test07
+    [Migration("20240219160902_t4")]
+    partial class t4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,6 +86,9 @@ namespace Inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CateId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,17 +103,35 @@ namespace Inventory.Migrations
                     b.Property<decimal?>("StandardPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupplierRefId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("cid")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("cid");
+                    b.HasIndex("CateId");
 
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Inventory.Models.ItemSupplier", b =>
+                {
+                    b.Property<int>("Item_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Supplier_Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Desctiption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Item_Id", "Supplier_Id");
+
+                    b.HasIndex("Supplier_Id");
+
+                    b.ToTable("ItemSupplier");
                 });
 
             modelBuilder.Entity("Inventory.Models.Supplier", b =>
@@ -160,9 +181,30 @@ namespace Inventory.Migrations
                 {
                     b.HasOne("Inventory.Models.Category", "Category")
                         .WithMany("Items")
-                        .HasForeignKey("cid");
+                        .HasForeignKey("CateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Inventory.Models.ItemSupplier", b =>
+                {
+                    b.HasOne("Inventory.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("Item_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Inventory.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("Supplier_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Inventory.Models.Category", b =>

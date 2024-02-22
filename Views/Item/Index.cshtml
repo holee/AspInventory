@@ -8,27 +8,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div class="alert alert-success">
-    @ViewBag.message
 
-    @DateTime.UtcNow 
-    @("Hello WOrld")
-    @{
-        int age = 43;
-        string name = "sgdvsdsvd";
-        @age
-        <h2>@name</h2>
-
-        for (int i = 0; i < 10; i++)
-        {
-            <h1>@i</h1>
-        }
-        
-    }
-   @{
-
-   }
-</div>
 <table class="table">
     <thead>
         <tr>
@@ -36,10 +16,10 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @* @Html.DisplayNameFor(model => model.CateId) *@
+                @Html.DisplayNameFor(model => model.Category.CategoryName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SupplierRefId)
+                
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductCode)
@@ -63,10 +43,10 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-              @*   @Html.DisplayFor(modelItem => item.CateId) *@
+              @Html.DisplayFor(modelItem => item.Category!.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierRefId)
+               
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductCode)
