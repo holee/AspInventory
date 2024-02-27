@@ -1,5 +1,6 @@
 using Inventory.Data;
 using Inventory.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,15 @@ builder.Services.AddScoped<DataContext>();
 builder.Services.AddScoped<DapperContext>();
 builder.Services.AddScoped<ICategoryService, CategoryServiceImpl>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+//Account/Login
+//builder.Services.ConfigureApplicationCookie(option =>
+//{
+//    option.LoginPath = "/Auth/Login";
+//});
+
+
 
 //Add Service by OnConfigure Method
 
@@ -31,6 +41,8 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapDefaultControllerRoute();//controller=Home/action=Index/id?
 //app.MapControllerRoute(
 //        name:"Home",

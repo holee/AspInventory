@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> _signInManager
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (_signInManager.IsSignedIn(User))
+{
+    <h2>You Are login As : @User!.Identity!.Name</h2>
+}
+else
+{
+    <h1>No</h1>
+}
+<form asp-action="logout" asp-controller="Account">
+    <button>Logout</button>
+</form>

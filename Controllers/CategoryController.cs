@@ -1,9 +1,12 @@
 ﻿using Inventory.Models;
 using Inventory.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Controllers
 {
+
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
