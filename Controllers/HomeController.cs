@@ -17,7 +17,8 @@ namespace Inventory.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Administrator,Account")]
+        //[Authorize(Roles = "Account")]
         public ViewResult Index()
         {
 

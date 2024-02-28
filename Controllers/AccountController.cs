@@ -1,20 +1,23 @@
 ﻿using Inventory.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Inventory.Controllers
 {
     public class AccountController : Controller
     {
 
-        private UserManager<IdentityUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-
+        private readonly RoleManager<IdentityRole> _roleManager;
         public AccountController(UserManager<IdentityUser> userManager,
-                                SignInManager<IdentityUser> signInManager)
+                                SignInManager<IdentityUser> signInManager,
+                                RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -32,9 +35,30 @@ namespace Inventory.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Create(RegisterModel model)
+        public async Task<ActionResult> Create(RegisterModel model,string? returnUrl=null)
         {
+            returnUrl ??= Url.Content("/Home");
+            ViewBag.ReturnUrl = returnUrl;
             if (!ModelState.IsValid) return View("Register", model);
+
+            if (!(await _roleManager.RoleExistsAsync(model.RoleName)))
+            {
+                var role = new IdentityRole
+                {
+                    Name = model.RoleName
+                };
+                var roleResult = await _roleManager.CreateAsync(role);
+                if (!roleResult.Succeeded)
+                {
+                    foreach (var item in roleResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, item.Description);
+                    }
+                    return View("Register", model);
+                }
+               
+            }
+
 
             var user = new IdentityUser
             {
@@ -53,9 +77,18 @@ namespace Inventory.Controllers
                 return View("Register", model);
             }
 
+            var identityResult= await _userManager.AddToRoleAsync(user, model.RoleName);
+            if (!identityResult.Succeeded)
+            {
+                foreach (var item in identityResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty,item.Description);
+                }
+                return View("Register", model);
+            }
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Redirect("/Account/Index");
+            return LocalRedirect(returnUrl);
         }
 
         public IActionResult Login(string? returnUrl=null) {
